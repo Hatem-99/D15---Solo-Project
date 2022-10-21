@@ -22,8 +22,11 @@ productsRouter.post("/", async (req, res, next) => {
 productsRouter.get("/", async (req, res, next) => {
   try {
     const mongoQeury = q2m(req.query)
-    console.log(mongoQeury.criteria.page)
-    const products = await productModel.find().skip(0).limit(5).populate({
+    console.log(mongoQeury)
+    let skip = (parseInt(mongoQeury.criteria.page) -1 ) * 5
+    let limit = parseInt(mongoQeury.criteria.page) * 5
+    
+    const products = await productModel.find().skip(skip).limit(limit).populate({
       path: "reviews",
       select: "comment rate",
     });
